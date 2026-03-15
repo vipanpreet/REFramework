@@ -16,13 +16,13 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-        
+
       - name: Configure CMake
         run: cmake -S ${{github.workspace}}/csharp-api -B ${{github.workspace}}/csharp-api/build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/csharp-api/build --config ${{env.BUILD_TYPE}} --target ALL_BUILD
-      
+
       - name: Prepare release
         working-directory: ${{github.workspace}}/csharp-api
         run: |
@@ -45,7 +45,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        target: [RE2, RE2_TDB66, RE3, RE3_TDB67, RE4, RE7, RE7_TDB49, RE8, RE9, DMC5, MHRISE, SF6, DD2, MHWILDS, PRAGMATA, MHSTORIES3]
+        target: [RE9]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -78,7 +78,7 @@ jobs:
           name: ${{matrix.target}}
           path: ${{github.workspace}}/${{matrix.target}}.zip
           if-no-files-found: error
-    
+
   nightly-push:
     runs-on: windows-latest
     needs: [dev-release, csharp-release]
@@ -112,4 +112,3 @@ jobs:
           makeLatest: true
           bodyFile: ${{github.workspace}}/nightly-body.md
           allowUpdates: true
-
